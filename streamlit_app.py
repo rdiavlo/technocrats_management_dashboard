@@ -137,7 +137,8 @@ if view == "Operator — Today":
     st.title("Today's Production")
     st.caption(today.strftime("%A, %d %B %Y"))
 
-    df = get_runs(today, today)
+    with st.spinner("Loading data..."):
+        df = get_runs(today, today)
 
     if df.empty:
         st.info("No production runs recorded for today yet.")
@@ -178,7 +179,8 @@ else:
         st.error("'From' date must be before 'To' date.")
         st.stop()
 
-    df = get_runs(start_date, end_date)
+    with st.spinner("Loading data..."):
+        df = get_runs(start_date, end_date)
 
     if df.empty:
         st.info("No data for the selected date range.")
