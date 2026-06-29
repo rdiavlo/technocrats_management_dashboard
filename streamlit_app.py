@@ -19,7 +19,7 @@ conn = st.connection("neon", type="sql")
 @st.cache_data(ttl=300)
 def get_runs(start_date: date, end_date: date) -> pd.DataFrame:
     return conn.query(
-        """
+        f"""
         SELECT
             pr.batch_id,
             pr.run_date,
@@ -50,10 +50,9 @@ def get_runs(start_date: date, end_date: date) -> pd.DataFrame:
         JOIN  clients        cl  ON cl.client_id       = c.client_id
         JOIN  operators      o   ON o.operator_id      = pr.operator_id
         JOIN  shifts         s   ON s.shift_id         = pr.shift_id
-        WHERE pr.run_date BETWEEN :start AND :end
+        WHERE pr.run_date BETWEEN '{start_date}' AND '{end_date}'
         ORDER BY pr.run_date DESC, pr.start_time DESC
         """,
-        params={"start": str(start_date), "end": str(end_date)},
         ttl=300,
     )
 
